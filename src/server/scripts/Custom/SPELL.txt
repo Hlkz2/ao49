@@ -1,0 +1,27 @@
+SORTS
+
+
+
+FEU
+
+20712 : Souffle de flammes : 900/solo, devant, instant (feu)
+40077 : Coup de queue : 900/1k5/solo + bump, instant (feu)
+55663 : Rugissement : 1k3/solo + silence, instant (feu)
+38728 : Nova de feu : 1k/solo, all, instant (feu)
+42220 : Déflagration, fear 4 sec (feu)
+
+71524 : Vol de feu : bump Aoe / 3k5/solo (feu)
+66721 : Fureur ardente : stack +5%dgt, flammes (feu)
+
+VENT
+
+55912 : Souffle explosif : bump Aoe (vent)
+
+ARCANE
+
+48185 : Canalisation d'Arugal : drain lanceur=>all (arcane)
+
+AURA
+
+45111 : Enrager : rouge + buff (aura)
+25169 : Justice ardente : rouge/flammes sans buff (aura)
