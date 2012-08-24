@@ -24,24 +24,42 @@ bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint3
 		player->UpdateSkillsToMaxSkillsForLevel();
 		if (player->HasSpell(17877)) {
 		player->learnSpell(18867, false);
-		player->learnSpell(18868, false); } // brulure de l'ombre
+		player->learnSpell(18868, false);
+		player->learnSpell(18869, false);
+		player->learnSpell(18870, false); } // brulure de l'ombre
 		if (player->HasSpell(11366)) {
 		player->learnSpell(12505, false);
 		player->learnSpell(12522, false);
-		player->learnSpell(12523, false); } // explosion pyrotechnique
+		player->learnSpell(12523, false);
+		player->learnSpell(12524, false);
+		player->learnSpell(12525, false); } // explosion pyrotechnique
 		if (player->HasSpell(11113)) {
-		player->learnSpell(13018, false); } // vague explosive
+		player->learnSpell(13018, false);
+		player->learnSpell(13019, false); } // vague explosive
 		if (player->HasSpell(5570)) {
-		player->learnSpell(24974, false); } // essaim d'insecte
+		player->learnSpell(24974, false);
+		player->learnSpell(24975, false); } // essaim d'insecte
 		if (player->HasSpell(19434)) {
 		player->learnSpell(20900, false);
-		player->learnSpell(20901, false); } // visée
+		player->learnSpell(20901, false);
+		player->learnSpell(20902, false); } // visée
 		if (player->HasSpell(15407)) {
 		player->learnSpell(17311, false);
-		player->learnSpell(17312, false); } // fouet mental
+		player->learnSpell(17312, false);
+		player->learnSpell(17313, false); } // fouet mental
 		if (player->HasSpell(19236)) {
+		player->learnSpell(19238, false);
 		player->learnSpell(19240, false);
-		player->learnSpell(19238, false); } // prière du désespoir
+		player->learnSpell(19241, false); } // prière du désespoir
+		if (player->HasSpell(20473)) {
+		player->learnSpell(20929, false); } // hotion sacre
+		if (player->HasSpell(19306)) {
+		player->learnSpell(20909, false); } // contre-attaque
+		if (player->HasSpell(16511)) {
+		player->learnSpell(17347, false); } // hemorragie
+		if (player->HasSpell(11426)) {
+		player->learnSpell(13031, false); } // barriere de glace
+		
 		creature->CastSpell(player,38588,false);
 		break;
 
