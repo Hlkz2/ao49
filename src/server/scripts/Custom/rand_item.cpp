@@ -53,7 +53,7 @@ bool OnGossipSelect(Player *player, Creature * creature, uint32 sender, uint32 a
 	
     case 10:
         retour = action;
-        player->ADD_GOSSIP_ITEM(6, "Tissu.." GOSSIP_SENDER_MAIN, 400);
+        player->ADD_GOSSIP_ITEM(6, "Tissu..", GOSSIP_SENDER_MAIN, 400);
         player->ADD_GOSSIP_ITEM(6, "Cuir..", GOSSIP_SENDER_MAIN, 500);
         player->ADD_GOSSIP_ITEM(6, "Mailles..", GOSSIP_SENDER_MAIN, 600);
         player->ADD_GOSSIP_ITEM(6, "Plaques..", GOSSIP_SENDER_MAIN, 700);
