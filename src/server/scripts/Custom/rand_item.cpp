@@ -69,6 +69,7 @@ bool OnGossipSelect(Player *player, Creature * creature, uint32 sender, uint32 a
         player->ADD_GOSSIP_ITEM(6, "Bague griffe-de-drake (49)", GOSSIP_SENDER_MAIN, 155);
         player->ADD_GOSSIP_ITEM(6, "Anneau en sombrefer (48)", GOSSIP_SENDER_MAIN, 156);
         player->ADD_GOSSIP_ITEM(6, "Anneau runique (45)", GOSSIP_SENDER_MAIN, 157);
+        player->ADD_GOSSIP_ITEM(6, "Chevalière d'aigue-marine (43)", GOSSIP_SENDER_MAIN, 162);
         player->ADD_GOSSIP_ITEM(6, "Lentille verte (Ingé)", GOSSIP_SENDER_MAIN, 158);
         player->ADD_GOSSIP_ITEM(6, "Brassards des eaux sombres (47)", GOSSIP_SENDER_MAIN, 159);
         player->ADD_GOSSIP_ITEM(6, "Poignes de fer (43)", GOSSIP_SENDER_MAIN, 160);
@@ -86,6 +87,7 @@ bool OnGossipSelect(Player *player, Creature * creature, uint32 sender, uint32 a
 	    case 159: item_id = 10800; goto l276276; break;
 	    case 160: item_id = 9640; goto l276276; break;
 	    case 161: item_id = 9410; goto l276276; break;
+	    case 162: item_id = 20964; goto l276276; break;
 
     case 250:
         retour = action;
