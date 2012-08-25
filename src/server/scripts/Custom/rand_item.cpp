@@ -151,7 +151,7 @@ bool OnGossipSelect(Player *player, Creature * creature, uint32 sender, uint32 a
 	    case 305: item_id = 51962; goto l276276; break;
 	    case 306: item_id = 51982; goto l276276; break;
 	    case 307: item_id = 51981; goto l276276; break;
-	    case 308: item_id = 51980; goto l276276; break;
+	    case 308: item_id = 51990; goto l276276; break;
 	    case 309: item_id = 51989; goto l276276; break;
 	    case 310: item_id = 51992; goto l276276; break;
 	    case 311: item_id = 51974; goto l276276; break;
