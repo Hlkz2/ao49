@@ -2543,25 +2543,19 @@ class Player : public Unit, public GridObject<Player>
 
 		uint32 SuitableForTransmogrification(Item* oldItem, Item* newItem); // custom transmo
 		
-        uint8 GetClmSlotId() const { return m_ClmSlotId; }
-        void SetClmSlotId(uint8 faction) { m_ClmSlotId = faction; }
-        uint32 GetClmEnchId() const { return m_ClmEnchId; }
-        void SetClmEnchId(uint32 faction) { m_ClmEnchId = faction; }
-        uint32 GetClmReqIl() const { return m_ClmReqIl; }
-        void SetClmReqIl(uint32 faction) { m_ClmReqIl = faction; }
-        uint32 GetClmTwoHa() const { return m_ClmTwoHa; }
-        void SetClmTwoHa(uint32 faction) { m_ClmTwoHa = faction; }
+        uint8 GetClmSlotid() const { return m_ClmSlotid; }
+        void SetClmSlotid(uint8 slotid) { m_ClmSlotid = slotid; }
         uint32 GetClmSlty() const { return m_ClmSlty; }
-        void SetClmSlty(uint32 faction) { m_ClmSlty = faction; }
+        void SetClmSlty(uint32 slty) { m_ClmSlty = slty; }
 		
         int* GetRandRie() const { return m_RandRie; }
-        void SetRandRie(int* faction) { m_RandRie = faction; }
-        std::string* GetRandRis() const { return m_RandRis; }
-        void SetRandRis(std::string* faction) { m_RandRis = faction; }
+        void SetRandRie(int* rie) { m_RandRie = rie; }
+		std::string* GetRandRis() const { return m_RandRis; }
+        void SetRandRis(std::string* ris) { m_RandRis = ris; }
         uint32 GetRandRetour() const { return m_RandRetour; }
-        void SetRandRetour(uint32 faction) { m_RandRetour = faction; }
+        void SetRandRetour(uint32 retour) { m_RandRetour = retour; }
         uint32 GetRandItId() const { return m_RandItId; }
-        void SetRandItId(uint32 faction) { m_RandItId = faction; }
+        void SetRandItId(uint32 itemid) { m_RandItId = itemid; }
 
     protected:
         // Gamemaster whisper whitelist
@@ -2899,10 +2893,7 @@ class Player : public Unit, public GridObject<Player>
 
 		//custom
 		
-        uint8 m_ClmSlotId;
-        uint32 m_ClmEnchId;
-        uint32 m_ClmReqIl;
-        uint32 m_ClmTwoHa;
+        uint8 m_ClmSlotid;
         uint32 m_ClmSlty;
 		
         int* m_RandRie;
