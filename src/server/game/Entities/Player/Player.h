@@ -2542,6 +2542,26 @@ class Player : public Unit, public GridObject<Player>
         }
 
 		uint32 SuitableForTransmogrification(Item* oldItem, Item* newItem); // custom transmo
+		
+        uint8 GetClmSlotId() const { return m_ClmSlotId; }
+        void SetClmSlotId(uint8 faction) { m_ClmSlotId = faction; }
+        uint32 GetClmEnchId() const { return m_ClmEnchId; }
+        void SetClmEnchId(uint32 faction) { m_ClmEnchId = faction; }
+        uint32 GetClmReqIl() const { return m_ClmReqIl; }
+        void SetClmReqIl(uint32 faction) { m_ClmReqIl = faction; }
+        uint32 GetClmTwoHa() const { return m_ClmTwoHa; }
+        void SetClmTwoHa(uint32 faction) { m_ClmTwoHa = faction; }
+        uint32 GetClmSlty() const { return m_ClmSlty; }
+        void SetClmSlty(uint32 faction) { m_ClmSlty = faction; }
+		
+        int* GetRandRie() const { return m_RandRie; }
+        void SetRandRie(int* faction) { m_RandRie = faction; }
+        std::string* GetRandRis() const { return m_RandRis; }
+        void SetRandRis(std::string* faction) { m_RandRis = faction; }
+        uint32 GetRandRetour() const { return m_RandRetour; }
+        void SetRandRetour(uint32 faction) { m_RandRetour = faction; }
+        uint32 GetRandItId() const { return m_RandItId; }
+        void SetRandItId(uint32 faction) { m_RandItId = faction; }
 
     protected:
         // Gamemaster whisper whitelist
@@ -2876,6 +2896,19 @@ class Player : public Unit, public GridObject<Player>
         InstanceTimeMap _instanceResetTimes;
         uint32 _pendingBindId;
         uint32 _pendingBindTimer;
+
+		//custom
+		
+        uint8 m_ClmSlotId;
+        uint32 m_ClmEnchId;
+        uint32 m_ClmReqIl;
+        uint32 m_ClmTwoHa;
+        uint32 m_ClmSlty;
+		
+        int* m_RandRie;
+        std::string* m_RandRis;
+        uint32 m_RandRetour;
+        uint32 m_RandItId;
 };
 
 void AddItemsSetItem(Player*player, Item* item);

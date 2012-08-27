@@ -3,19 +3,16 @@
 class enchant_npc : public CreatureScript {
 public: enchant_npc() : CreatureScript("enchant_npc") {}
 
-uint8 slotid; uint32 enchid; uint32 reqil; uint32 twoha; uint32 slty;
-
 bool OnGossipHello(Player *player, Creature * creature) {
 	MainMenu(player, creature);
     return true; }
 
 void MainMenu(Player *player, Creature *creature) {
-		slotid = 0; enchid = 0; reqil = 0; twoha = 0; slty = 0; Item *item;
         player->ADD_GOSSIP_ITEM(0, "Dos", GOSSIP_SENDER_MAIN, 14);
         player->ADD_GOSSIP_ITEM(0, "Torse", GOSSIP_SENDER_MAIN, 4);
         player->ADD_GOSSIP_ITEM(0, "Poignets", GOSSIP_SENDER_MAIN, 8);
         player->ADD_GOSSIP_ITEM(0, "Mains", GOSSIP_SENDER_MAIN, 9);
-        item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, 6); if(item)
+        Item *item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, 6); if(item)
         player->ADD_GOSSIP_ITEM(0, "Jambes : Renfort d'armure épais", GOSSIP_SENDER_MAIN, 6);
         player->ADD_GOSSIP_ITEM(0, "Pieds", GOSSIP_SENDER_MAIN, 7);
         player->ADD_GOSSIP_ITEM(0, "Main droite", GOSSIP_SENDER_MAIN, 15);		
@@ -27,52 +24,50 @@ void MainMenu(Player *player, Creature *creature) {
 			player->ADD_GOSSIP_ITEM(0, "A distance : lunette mortelle", GOSSIP_SENDER_MAIN, 17); }
 		player->SEND_GOSSIP_MENU(20003, creature->GetGUID()); }
 
-void Ench(Player *player, Creature *creature, Item *item) {
-	item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, slotid );
+void Ench(Player *player, Creature *creature) {
+	Item *item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, player->GetClmSlotId());
 	
 	if(!item) {
 		creature->MonsterWhisper("Vous devez vous équiper de l'objet.", player->GetGUID());
 		MainMenu(player, creature);
         return; }
-    if (reqil == 1 && item->GetTemplate()->ItemLevel <= 34) {
+    if (player->GetClmReqIl() == 1 && item->GetTemplate()->ItemLevel <= 34) {
 		creature->MonsterWhisper("L'objet n'est pas d'un niveau suffisant.", player->GetGUID());
 		MainMenu(player, creature);
         return; }
-    if (twoha == 1 && item->GetTemplate()->InventoryType != 17) {
+    if (player->GetClmTwoHa() == 1 && item->GetTemplate()->InventoryType != 17) {
 		creature->MonsterWhisper("Cette enchantement requiert une arme à deux mains.", player->GetGUID());
 		MainMenu(player, creature);
         return; }
-	if (slotid == 16) {
+	if (player->GetClmSlotId() == 16) {
 	if ((item->GetTemplate()->Class == 4) && (item->GetTemplate()->SubClass != 6)) {
 		creature->MonsterWhisper("Je n'enchante pas ce genre d'objets.", player->GetGUID());
 		player->CLOSE_GOSSIP_MENU();
         return; }
-	if(item->GetTemplate()->SubClass == 6 && slty == 1) {
+	if(item->GetTemplate()->SubClass == 6 && player->GetClmSlty() == 1) {
 		creature->MonsterWhisper("Un enchantement d'arme ne va pas sur un bouclier.", player->GetGUID());
 		player->CLOSE_GOSSIP_MENU();
 		return; }
-	if(item->GetTemplate()->SubClass != 6 && slty == 0) {
+	if(item->GetTemplate()->SubClass != 6 && player->GetClmSlty() == 0) {
 		creature->MonsterWhisper("Un enchantement de bouclier ne va pas sur ce type d'arme.", player->GetGUID());
 		player->CLOSE_GOSSIP_MENU();
 		return; } }
-	SpellItemEnchantmentEntry const* enchant_id = sSpellItemEnchantmentStore.LookupEntry(enchid);
+	SpellItemEnchantmentEntry const* enchant_id = sSpellItemEnchantmentStore.LookupEntry(player->GetClmEnchId());
 	if (!enchant_id) {
 		creature->MonsterWhisper("L'enchantement sélectionné n'est pas un enchantement, prévenez un administrateur.", player->GetGUID());
 		player->CLOSE_GOSSIP_MENU();
         return; }
-	if (slotid != 0) {
 	player->ApplyEnchantment(item, PERM_ENCHANTMENT_SLOT, false);
-	item->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchid, 0, 0);
-	player->ApplyEnchantment(item, PERM_ENCHANTMENT_SLOT, true); }
-	else {
+	item->SetEnchantment(PERM_ENCHANTMENT_SLOT, player->GetClmEnchId(), 0, 0);
+	player->ApplyEnchantment(item, PERM_ENCHANTMENT_SLOT, true);
+	/*else {
 	player->ADD_GOSSIP_ITEM(0, "<Retour>", GOSSIP_SENDER_MAIN, 100);
 	player->SEND_GOSSIP_MENU(1000011, creature->GetGUID()); 
-	return; }
+	return; }*/
 	MainMenu(player, creature); }
 
 bool OnGossipSelect(Player *player, Creature * creature, uint32 sender, uint32 action) {
     player->PlayerTalkClass->ClearMenus();
-	Item  *item;
 
 		switch (action) {
 	
@@ -80,7 +75,7 @@ bool OnGossipSelect(Player *player, Creature * creature, uint32 sender, uint32 a
 
 // Dos
 	case 14:
-		slotid = 14;
+		player->SetClmEnchId(14);
 		player->ADD_GOSSIP_ITEM(3, "70 armure", GOSSIP_SENDER_MAIN, 1412);
 		player->ADD_GOSSIP_ITEM(3, "120 armure", GOSSIP_SENDER_MAIN, 1407);
 		player->ADD_GOSSIP_ITEM(3, "5 résistances", GOSSIP_SENDER_MAIN, 1413);
@@ -98,24 +93,24 @@ bool OnGossipSelect(Player *player, Creature * creature, uint32 sender, uint32 a
 		player->ADD_GOSSIP_ITEM(0, "=> Retour", GOSSIP_SENDER_MAIN, 100);
 		player->SEND_GOSSIP_MENU(20004, creature->GetGUID());
 		break;
-	case 1400:	enchid = 1395;				Ench(player, creature, item);	break;
-	case 1401:	enchid = 368;	reqil = 1; 	Ench(player, creature, item);	break;
-	case 1402:	enchid = 910;				Ench(player, creature, item);	break;
-	case 1403:	enchid = 1441;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1404:	enchid = 804;				Ench(player, creature, item);	break;
-	case 1405:	enchid = 1349;				Ench(player, creature, item);	break;
-	case 1406:	enchid = 2078;				Ench(player, creature, item);	break;
-	case 1407:	enchid = 2662;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1408:	enchid = 2663;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1409:	enchid = 2780;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1410:	enchid = 1257;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1411:	enchid = 1943;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1412:	enchid = 1889;				Ench(player, creature, item);	break;
-	case 1413:	enchid = 1888;				Ench(player, creature, item);	break;
+	case 1400:	player->SetClmEnchId(1395);							Ench(player, creature);	break;
+	case 1401:	player->SetClmEnchId(368);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1402:	player->SetClmEnchId(910);							Ench(player, creature);	break;
+	case 1403:	player->SetClmEnchId(1441);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1404:	player->SetClmEnchId(804);							Ench(player, creature);	break;
+	case 1405:	player->SetClmEnchId(1349);							Ench(player, creature);	break;
+	case 1406:	player->SetClmEnchId(2078);							Ench(player, creature);	break;
+	case 1407:	player->SetClmEnchId(2662);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1408:	player->SetClmEnchId(2663);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1409:	player->SetClmEnchId(2780);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1410:	player->SetClmEnchId(1257);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1411:	player->SetClmEnchId(1943);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1412:	player->SetClmEnchId(1889);							Ench(player, creature);	break;
+	case 1413:	player->SetClmEnchId(1888);							Ench(player, creature);	break;
 		
 // Torse
 	case 4:
-		slotid = 4;
+		player->SetClmSlotId(4);
 		player->ADD_GOSSIP_ITEM(3, "100 vie", GOSSIP_SENDER_MAIN, 402);
 		player->ADD_GOSSIP_ITEM(3, "100 mana", GOSSIP_SENDER_MAIN, 403);
 		player->ADD_GOSSIP_ITEM(3, "150 vie", GOSSIP_SENDER_MAIN, 401);
@@ -127,18 +122,18 @@ bool OnGossipSelect(Player *player, Creature * creature, uint32 sender, uint32 a
 		player->ADD_GOSSIP_ITEM(0, "=> Retour", GOSSIP_SENDER_MAIN, 100);
 		player->SEND_GOSSIP_MENU(20005, creature->GetGUID());
 		break;
-	case 400:	enchid = 2661;	reqil = 1;	Ench(player, creature, item);	break;
-	case 401:	enchid = 2659;	reqil = 1;	Ench(player, creature, item);	break;
-	case 402:	enchid = 1892;				Ench(player, creature, item);	break;
-	case 403:	enchid = 1893;				Ench(player, creature, item);	break;
-	case 404:	enchid = 1891;				Ench(player, creature, item);	break;
-	case 405:	enchid = 2852;	reqil = 1;	Ench(player, creature, item);	break;
-	case 406:	enchid = 2789;	reqil = 1;	Ench(player, creature, item);	break;
-	case 407:	enchid = 1144;	reqil = 1;	Ench(player, creature, item);	break;
+	case 400:	player->SetClmEnchId(2661);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 401:	player->SetClmEnchId(2659);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 402:	player->SetClmEnchId(1892);							Ench(player, creature);	break;
+	case 403:	player->SetClmEnchId(1893);							Ench(player, creature);	break;
+	case 404:	player->SetClmEnchId(1891);							Ench(player, creature);	break;
+	case 405:	player->SetClmEnchId(2852);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 406:	player->SetClmEnchId(2789);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 407:	player->SetClmEnchId(1144);	player->SetClmReqIl(1);	Ench(player, creature);	break;
   
 // Bras
 	case 8:
-		slotid = 8;
+		player->SetClmSlotId(8);
 		player->ADD_GOSSIP_ITEM(3, "12 endurance", GOSSIP_SENDER_MAIN, 805);
 		player->ADD_GOSSIP_ITEM(3, "12 intelligence", GOSSIP_SENDER_MAIN, 806);
 		player->ADD_GOSSIP_ITEM(3, "12 force", GOSSIP_SENDER_MAIN, 801);
@@ -151,19 +146,19 @@ bool OnGossipSelect(Player *player, Creature * creature, uint32 sender, uint32 a
 		player->ADD_GOSSIP_ITEM(0, "=> Retour", GOSSIP_SENDER_MAIN, 100);
 		player->SEND_GOSSIP_MENU(20006, creature->GetGUID());
 		break;
-	case 800:	enchid = 2319;				Ench(player, creature, item);	break;
-	case 801:	enchid = 372;	reqil = 1;	Ench(player, creature, item);	break;
-	case 802:	enchid = 1891;	reqil = 1;	Ench(player, creature, item);	break;
-	case 803:	enchid = 1943;	reqil = 1;	Ench(player, creature, item);	break;
-	case 804:	enchid = 2382;	reqil = 1;	Ench(player, creature, item);	break;
-	case 805:	enchid = 371;	reqil = 1;	Ench(player, creature, item);	break;
-	case 806:	enchid = 369;	reqil = 1;	Ench(player, creature, item);	break;
-	case 807:	enchid = 1593;	reqil = 1;	Ench(player, creature, item);	break;
-	case 808:	enchid = 355;				Ench(player, creature, item);	break;
+	case 800:	player->SetClmEnchId(2319);							Ench(player, creature);	break;
+	case 801:	player->SetClmEnchId(372);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 802:	player->SetClmEnchId(1891);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 803:	player->SetClmEnchId(1943);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 804:	player->SetClmEnchId(2382);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 805:	player->SetClmEnchId(371);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 806:	player->SetClmEnchId(369);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 807:	player->SetClmEnchId(1593);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 808:	player->SetClmEnchId(355);							Ench(player, creature);	break;
 
 // Mains
 	case 9:
-		slotid = 9;
+		player->SetClmSlotId(9);
 		player->ADD_GOSSIP_ITEM(3, "15 force", GOSSIP_SENDER_MAIN, 904);
 		player->ADD_GOSSIP_ITEM(3, "15 agilité", GOSSIP_SENDER_MAIN, 901);
 		player->ADD_GOSSIP_ITEM(3, "15 toucher", GOSSIP_SENDER_MAIN, 903);
@@ -176,22 +171,22 @@ bool OnGossipSelect(Player *player, Creature * creature, uint32 sender, uint32 a
 		player->ADD_GOSSIP_ITEM(0, "=> Retour", GOSSIP_SENDER_MAIN, 100);
 		player->SEND_GOSSIP_MENU(20007, creature->GetGUID());
 		break;
-	case 900:	enchid = 846;				Ench(player, creature, item);	break;
-	case 901:	enchid = 883;				Ench(player, creature, item);	break;
-	case 902:	enchid = 2934;	reqil = 1;	Ench(player, creature, item);	break;
-	case 903:	enchid = 2935;	reqil = 1;	Ench(player, creature, item);	break;
-	case 904:	enchid = 684;	reqil = 1;	Ench(player, creature, item);	break;
-	case 905:	enchid = 1594;	reqil = 1;	Ench(player, creature, item);	break;
-	case 906:	enchid = 2323;	reqil = 1;	Ench(player, creature, item);	break;
-	case 907:	enchid = 931;				Ench(player, creature, item);	break;
-	case 908:	enchid = 930;				Ench(player, creature, item);	break;
+	case 900:	player->SetClmEnchId(846);							Ench(player, creature);	break;
+	case 901:	player->SetClmEnchId(883);							Ench(player, creature);	break;
+	case 902:	player->SetClmEnchId(2934);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 903:	player->SetClmEnchId(2935);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 904:	player->SetClmEnchId(684);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 905:	player->SetClmEnchId(1594);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 906:	player->SetClmEnchId(2323);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 907:	player->SetClmEnchId(931);							Ench(player, creature);	break;
+	case 908:	player->SetClmEnchId(930);							Ench(player, creature);	break;
 
 // Jambes
-	case 6:	slotid = 6;	enchid = 18;	Ench(player, creature, item);	break;
+	case 6:	player->SetClmSlotId(6);	player->SetClmEnchId(18);	Ench(player, creature);	break;
 
 // Bottes
 	case 7:
-		slotid = 7;
+		player->SetClmSlotId(7);
 		player->ADD_GOSSIP_ITEM(3, "12 endurance", GOSSIP_SENDER_MAIN, 701);
 		player->ADD_GOSSIP_ITEM(3, "12 agilité", GOSSIP_SENDER_MAIN, 704);
 		player->ADD_GOSSIP_ITEM(3, "9 endurance + vitesse mineur", GOSSIP_SENDER_MAIN, 703);
@@ -202,18 +197,18 @@ bool OnGossipSelect(Player *player, Creature * creature, uint32 sender, uint32 a
 		player->ADD_GOSSIP_ITEM(0, "=> Retour", GOSSIP_SENDER_MAIN, 100);
 		player->SEND_GOSSIP_MENU(20008, creature->GetGUID());
 		break;
-	case 700:	enchid = 2656;	reqil = 1;	Ench(player, creature, item);	break;
-	case 701:	enchid = 371;	reqil = 1;	Ench(player, creature, item);	break;
-	case 702:	enchid = 2658;	reqil = 1;	Ench(player, creature, item);	break;
-	case 703:	enchid = 2940;	reqil = 1;	Ench(player, creature, item);	break;
-	case 704:	enchid = 368;	reqil = 1;	Ench(player, creature, item);	break;
-	case 705:	enchid = 2939;	reqil = 1;	Ench(player, creature, item);	break;
-	case 706:	enchid = 3858;				Ench(player, creature, item);	break;
+	case 700:	player->SetClmEnchId(2656);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 701:	player->SetClmEnchId(371);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 702:	player->SetClmEnchId(2658);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 703:	player->SetClmEnchId(2940);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 704:	player->SetClmEnchId(368);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 705:	player->SetClmEnchId(2939);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 706:	player->SetClmEnchId(3858);							Ench(player, creature);	break;
 		
 // Armes
-	case 15:	slotid = 15;	goto l16;	break;
-	case 16:	slotid = 16;	l16:
-	case 153:	slty = 1;
+	case 15:	player->SetClmSlotId(15);	goto l16;	break;
+	case 16:	player->SetClmSlotId(16);	l16:
+	case 153:	player->SetClmSlty(1);
 		player->ADD_GOSSIP_ITEM(0, "=> Page 2", GOSSIP_SENDER_MAIN, 154);
 		player->ADD_GOSSIP_ITEM(3, "15 force", GOSSIP_SENDER_MAIN, 1502);
 		player->ADD_GOSSIP_ITEM(3, "20 force", GOSSIP_SENDER_MAIN, 1508);
@@ -252,39 +247,39 @@ bool OnGossipSelect(Player *player, Creature * creature, uint32 sender, uint32 a
 		player->SEND_GOSSIP_MENU(20009, creature->GetGUID());
 		break;
 // 1M
-	case 1500:	enchid = 1900;				Ench(player, creature, item);	break;
-	case 1501:	enchid = 2504;				Ench(player, creature, item);	break;
-	case 1502:	enchid = 2563;				Ench(player, creature, item);	break;
-	case 1503:	enchid = 2564;				Ench(player, creature, item);	break;
-	case 1504:	enchid = 2567;				Ench(player, creature, item);	break;
-	case 1505:	enchid = 2568;				Ench(player, creature, item);	break;
-	case 1506:	enchid = 120;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1507:	enchid = 2666;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1508:	enchid = 2668;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1509:	enchid = 2669;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1510:	enchid = 2671;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1511:	enchid = 2672;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1512:	enchid = 2673;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1513:	enchid = 2674;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1514:	enchid = 2675;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1515:	enchid = 3846;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1516:	enchid = 2505;				Ench(player, creature, item);	break;
-	case 1517:	enchid = 3222;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1518:	enchid = 1898;				Ench(player, creature, item);	break;
-	case 1519:	enchid = 1899;				Ench(player, creature, item);	break;
-	case 1520:	enchid = 803;				Ench(player, creature, item);	break;
-	case 1521:	enchid = 118;				Ench(player, creature, item);	break;
-	case 1522:	enchid = 1894;				Ench(player, creature, item);	break;
-	case 1523:	enchid = 912;				Ench(player, creature, item);	break;
+	case 1500:	player->SetClmEnchId(1900);							Ench(player, creature);	break;
+	case 1501:	player->SetClmEnchId(2504);							Ench(player, creature);	break;
+	case 1502:	player->SetClmEnchId(2563);							Ench(player, creature);	break;
+	case 1503:	player->SetClmEnchId(2564);							Ench(player, creature);	break;
+	case 1504:	player->SetClmEnchId(2567);							Ench(player, creature);	break;
+	case 1505:	player->SetClmEnchId(2568);							Ench(player, creature);	break;
+	case 1506:	player->SetClmEnchId(120);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1507:	player->SetClmEnchId(2666);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1508:	player->SetClmEnchId(2668);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1509:	player->SetClmEnchId(2669);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1510:	player->SetClmEnchId(2671);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1511:	player->SetClmEnchId(2672);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1512:	player->SetClmEnchId(2673);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1513:	player->SetClmEnchId(2674);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1514:	player->SetClmEnchId(2675);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1515:	player->SetClmEnchId(3846);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1516:	player->SetClmEnchId(2505);							Ench(player, creature);	break;
+	case 1517:	player->SetClmEnchId(3222);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1518:	player->SetClmEnchId(1898);							Ench(player, creature);	break;
+	case 1519:	player->SetClmEnchId(1899);							Ench(player, creature);	break;
+	case 1520:	player->SetClmEnchId(803);							Ench(player, creature);	break;
+	case 1521:	player->SetClmEnchId(118);							Ench(player, creature);	break;
+	case 1522:	player->SetClmEnchId(1894);							Ench(player, creature);	break;
+	case 1523:	player->SetClmEnchId(912);							Ench(player, creature);	break;
 // 2M
-	case 1524:	enchid = 2646;	twoha = 1;				Ench(player, creature, item);	break;
-	case 1525:	enchid = 2667;	twoha = 1;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1526:	enchid = 2670;	twoha = 1;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1527:	enchid = 1895;	twoha = 1;				Ench(player, creature, item);	break;
+	case 1524:	player->SetClmEnchId(2646);	player->SetClmTwoHa(1);							Ench(player, creature);	break;
+	case 1525:	player->SetClmEnchId(2667);	player->SetClmTwoHa(1);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1526:	player->SetClmEnchId(2670);	player->SetClmTwoHa(1);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1527:	player->SetClmEnchId(1895);	player->SetClmTwoHa(1);							Ench(player, creature);	break;
 
 // Boucliers
 	case 18:
-		slotid = 16;
+		player->SetClmSlotId(16);
 		player->ADD_GOSSIP_ITEM(3, "18 endurance", GOSSIP_SENDER_MAIN, 1803);
 		player->ADD_GOSSIP_ITEM(3, "12 inteligence", GOSSIP_SENDER_MAIN, 1804);
 		player->ADD_GOSSIP_ITEM(3, "12 résilience", GOSSIP_SENDER_MAIN, 1800);
@@ -294,15 +289,15 @@ bool OnGossipSelect(Player *player, Creature * creature, uint32 sender, uint32 a
 		player->ADD_GOSSIP_ITEM(0, "=> Retour", GOSSIP_SENDER_MAIN, 100);
 		player->SEND_GOSSIP_MENU(20010, creature->GetGUID());
 		break;
-	case 1800:	enchid = 3229;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1801:	enchid = 2653;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1802:	enchid = 1985;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1803:	enchid = 1071;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1804:	enchid = 2654;	reqil = 1;	Ench(player, creature, item);	break;
-	case 1805:	enchid = 1888;	reqil = 1;	Ench(player, creature, item);	break;
+	case 1800:	player->SetClmEnchId(3229);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1801:	player->SetClmEnchId(2653);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1802:	player->SetClmEnchId(1985);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1803:	player->SetClmEnchId(1071);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1804:	player->SetClmEnchId(2654);	player->SetClmReqIl(1);	Ench(player, creature);	break;
+	case 1805:	player->SetClmEnchId(1888);	player->SetClmReqIl(1);	Ench(player, creature);	break;
 		
 // Ranged
-	case 17:	slotid = 17;	enchid = 663;	Ench(player, creature, item);	break;
+	case 17:	player->SetClmSlotId(17);	player->SetClmEnchId(663);	Ench(player, creature);	break;
 	
 		}
 	return true; }
