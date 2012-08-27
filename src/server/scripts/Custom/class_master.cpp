@@ -59,7 +59,9 @@ bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint3
 		player->learnSpell(17347, false); } // hemorragie
 		if (player->HasSpell(11426)) {
 		player->learnSpell(13031, false); } // barriere de glace
-		
+		player->UpdateSkill(185, 450); //cuisine
+		player->UpdateSkill(129, 450); //secourisme
+		player->learnSpell(33391, false);
 		creature->CastSpell(player,38588,false);
 		break;
 
