@@ -240,4 +240,6 @@ int* RandItemEnch(int32 item_id) {
 		for (EnchStoreList::const_iterator ench_iter = tab->second.begin(); ench_iter != tab->second.end(); ++ench_iter) {
 			randitemench[count] = ench_iter->ench;
 			count++; } }
+		for(count; count < 32; count++) {
+			randitemench[count] = 0; count++; }
 	return randitemench; }
