@@ -43,7 +43,7 @@ bool OnGossipSelect(Player* player, Creature* creature, uint32 sender, uint32 ui
 				for (uint8 i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; i++) {
 					if (limit > 30) break;
 					if (Item* newItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, i)) {
-						if((newItem->GetTemplate()->ItemLevel == 60) && (newItem->GetTemplate()->RequiredLevel == 40)) {
+						if((newItem->GetTemplate()->ItemLevel == 60) && (newItem->GetTemplate()->RequiredLevel == 50)) {
 							uint32 display = newItem->GetTemplate()->DisplayInfoID;
 							if (player->SuitableForTransmogrification(oldItem, newItem) == ERR_FAKE_OK) {
 								if (_items[lowGUID].find(display) == _items[lowGUID].end()) {
@@ -57,7 +57,7 @@ bool OnGossipSelect(Player* player, Creature* creature, uint32 sender, uint32 ui
 	                for (uint32 j = 0; j < bag->GetBagSize(); j++) {
 						if (limit > 30) break;
 						if (Item* newItem = player->GetItemByPos(i, j)) {
-							if((newItem->GetTemplate()->ItemLevel == 60) && (newItem->GetTemplate()->RequiredLevel == 40)) {
+							if((newItem->GetTemplate()->ItemLevel == 60) && (newItem->GetTemplate()->RequiredLevel == 50)) {
 								uint32 display = newItem->GetTemplate()->DisplayInfoID;
 								if (player->SuitableForTransmogrification(oldItem, newItem) == ERR_FAKE_OK) {
 									if (_items[lowGUID].find(display) == _items[lowGUID].end()) {

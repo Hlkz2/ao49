@@ -226,6 +226,9 @@ std::string* RandItemSuffix(int32 item_id) {
 int randitemench[80];
 int* RandItemEnch(int32 item_id) {
 	uint32 count = 0; ItemTemplate const* item = sObjectMgr->GetItemTemplate(item_id);
+	for(count; count < 80; count++) {
+		randitemench[count] = 2; }
+	count = 0;
     if (item->RandomProperty) {
 		EnchantmentStore::const_iterator tab = RandomItemEnch.find(item->RandomProperty);
 		if (tab == RandomItemEnch.end()) return randitemench; 
@@ -240,6 +243,6 @@ int* RandItemEnch(int32 item_id) {
 		for (EnchStoreList::const_iterator ench_iter = tab->second.begin(); ench_iter != tab->second.end(); ++ench_iter) {
 			randitemench[count] = ench_iter->ench;
 			count++; } }
-		for(count; count < 32; count++) {
-			randitemench[count] = 0; count++; }
+	for (count=0; count < 31; count++) { 
+		sLog->outErrorDb("ench : %u", randitemench[count]); }
 	return randitemench; }

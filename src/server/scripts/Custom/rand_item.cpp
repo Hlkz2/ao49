@@ -296,14 +296,14 @@ bool OnGossipSelect(Player *player, Creature * creature, uint32 sender, uint32 a
 
 l276276:
 		case 9999:
-			player->SetRandRie(RandItemEnch(player->GetRandItId()));
-			if (player->GetRandRie()[0] == 0) return true;
-			player->SetRandRis(RandItemSuffix(player->GetRandItId()));
 			lmenu:
 			player->PlayerTalkClass->ClearMenus();
-			for (count=0; count<=30; count++) {
-			if (player->GetRandRie()[count] && (player->GetRandRie()[count] != 0)) {
-				player->ADD_GOSSIP_ITEM(6, " " + player->GetRandRis()[count], GOSSIP_SENDER_MAIN, 10001+count); } }
+			player->SetRandRis(RandItemSuffix(player->GetRandItId()));
+			player->SetRandRie(RandItemEnch(player->GetRandItId()));
+			for (count=0; count<31; count++) {
+				if (player->GetRandRie()[count] == 2) goto lmenu2;
+				player->ADD_GOSSIP_ITEM(6, " " + player->GetRandRis()[count], GOSSIP_SENDER_MAIN, 10001+count); }
+			lmenu2:
 			player->ADD_GOSSIP_ITEM(0, "<Retour>", GOSSIP_SENDER_MAIN, player->GetRandRetour());
 			player->SEND_GOSSIP_MENU(1000023, creature->GetGUID());
 			break;
