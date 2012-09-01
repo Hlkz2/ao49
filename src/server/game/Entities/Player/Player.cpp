@@ -5616,7 +5616,7 @@ void Player::RepopAtGraveyard()
 
 	if (GetMapId() == 169) {
 		ResurrectPlayer(0.1f);
-		CastSpell(this,57626,false); }
+		CastSpell(this,58806,false); }
 
     // if no grave found, stay at the current location
     // and don't show spirit healer location
